@@ -15,7 +15,7 @@ class machine:
 
         self.pravidla = pravidla
         # fakty = []
-        fakty = [['Peter', 'rodic', 'Jano'],['manzelia', 'Peter', 'Eva']]
+        fakty = [['Peter', 'rodic', 'Jano'],['manzelia', 'Peter', 'Eva'],['muz','Peter'],['zena','Eva'],['Peter','rodic','Sano']]
 
         # while True :
         #     text = input("zadat fakt (alebo 'x' pre vyhodnotenie): ")
@@ -26,16 +26,18 @@ class machine:
         self.fakty = fakty
 
     def najdi_naviazania(self):
-        nove_pravidla = []
-        for meno, opis in self.pravidla.items():
-            premenne = self.vyhodnot_podmienky(opis[0],{})
-            if premenne:
-                nove_pravidla.append(self.naviaz(premenne,opis[1]))
-        # print(nove_fakty)
-        nove_pravidla = self.filtruj(nove_pravidla)
-
-        if nove_pravidla:
-            self.vykonaj(nove_pravidla)
+        nove = 1
+        while nove == 1:
+            nove = 0
+            for meno, opis in self.pravidla.items():
+                nove_pravidla = []
+                premenne = self.vyhodnot_podmienky(opis[0],{})
+                if premenne:
+                    nove_pravidla.append(self.naviaz(premenne,opis[1]))
+                nove_pravidla = self.filtruj(nove_pravidla)
+                if nove_pravidla:
+                    nove = 1
+                    self.vykonaj(nove_pravidla)
         print(self.fakty)
 
     def vykonaj(self,pravidla):
@@ -46,45 +48,48 @@ class machine:
                 elif pravidlo[0] == 'vymaz':
                     self.fakty.remove(pravidlo)
                 elif pravidlo[0] == 'sprava':
-                    print(pravidlo[1:])
+                    print(' '.join(pravidlo[1:]))
 
-    def vyhodnot_podmienky(self, podmienky, premenne):
+    def vyhodnot_podmienky(self, podmien, premenne):
+        podmienky = podmien.copy()
         if not podmienky:
             return premenne
 
         podmienka = podmienky[0]
-
         for fakt in self.fakty:
+            tmp = 0
             if len(fakt) == len(podmienka):
-                lokal = premenne.copy()
-                podm = [lokal[x] if x[0] == '?' and x in lokal else x for x in podmienka]
+                podm = [premenne[x] if x[0] == '?' and x in premenne else x for x in podmienka]
                 for x in range(len(fakt)):
+                    if podm[0] == '<>' and podm[1] == podm[2]:
+                        tmp = 1
+                        break
                     if podm[x][0] != '?' and podm[x] != fakt[x]:
                         if podmienka[x][0] == '?' and fakt[x][0].isupper():
                             return False
                         else:
-                            lokal = {}
+                            tmp = 1
                             break
                     elif podm[x][0] == '?' and fakt[x][0].isupper():
-                        # if podm[x] in premenne and premenne[podm[x]] != fakt[x]:
-                        #     break
-                        # else:
-                        lokal[podm[x]] = fakt[x]
-                        # print(podm[x],fakt[x])
-                premenne = {**premenne, **lokal}
-                        # print(podmienka[x],fakt[x])
-                    # elif podm[x] != fakt[x]:
-                    #     break
-        podmienky.remove(podmienka)
-        return self.vyhodnot_podmienky(podmienky,premenne)
+                        premenne[podm[x]] = fakt[x]
+                if tmp == 0:
+                    if podmienka in podmienky:
+                        podmienky.remove(podmienka)
+                    premenne = self.vyhodnot_podmienky(podmienky, premenne)
+                    if premenne:
+                        return premenne
+                    else:
+                        premenne = {}
+        return False
 
     def naviaz(self, premenne, akcie):
         nove_akcie = []
         for akcia in akcie:
+            akc = akcia.copy()
             for i, slovo in enumerate(akcia):
                 if slovo[0] == '?':
-                    akcia[i] = premenne[slovo]
-            nove_akcie.append(akcia)
+                    akc[i] = premenne[slovo]
+            nove_akcie.append(akc)
         return nove_akcie
 
     def filtruj(self, pravidla):
@@ -92,23 +97,17 @@ class machine:
         for akcia in pravidla:
             for i, pravidlo in enumerate(akcia):
                 iba_vypis = 0
-                # print(pravidlo)
-                # print(pravidlo[1:])
-                # print(self.fakty)
                 if pravidlo[0] == 'pridaj' and pravidlo[1:] in self.fakty:
                     akcia.remove(pravidlo)
                 elif pravidlo[0] == 'vymaz' and pravidlo[1:] not in self.fakty:
                     akcia.remove(pravidlo)
                 elif pravidlo[0] == 'sprava':
-                    iba_vypis = 1
+                    iba_vypis -= 1
                 else:
-                    iba_vypis = 0
-            if not akcia or iba_vypis == 1:
+                    iba_vypis += 1
+            if not akcia or iba_vypis == 0:
                 pravidla.remove(akcia)
         return pravidla
-
-        # for podmienka in podmienky:
-        #     print(1)
 
 
 m = machine()

@@ -17,6 +17,32 @@
       [
         "pridaj ?Z rodic ?Y"
       ]
+    ],
+    "Otec": [
+      [
+        "?X rodic ?Y",
+        "muz ?X"
+      ],
+      [
+        "pridaj ?X otec ?Y"
+      ]
+    ],
+    "Matka": [
+      [
+        "?X rodic ?Y",
+        "zena ?X"
+      ],
+      [
+        "pridaj ?X matka ?Y"
+      ]
+    ],
+    "Surodenci":[
+      [
+        "?X rodic ?Y",
+        "?X rodic ?Z",
+        "<> ?Y ?Z"
+      ],
+      ["pridaj ?Y a ?Z su surodenci"]
     ]
   }
 }
