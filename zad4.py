@@ -26,21 +26,27 @@ class machine:
         self.fakty = fakty
 
     def najdi_naviazania(self):
-        nove_fakty = []
+        nove_pravidla = []
         for meno, opis in self.pravidla.items():
             premenne = self.vyhodnot_podmienky(opis[0],{})
             if premenne:
-                nove_fakty.append(self.naviaz(premenne,opis[1]))
-        print(nove_fakty)
+                nove_pravidla.append(self.naviaz(premenne,opis[1]))
+        # print(nove_fakty)
+        nove_pravidla = self.filtruj(nove_pravidla)
 
-    def naviaz(self,premenne,akcie):
-        nove_akcie = []
-        for akcia in akcie:
-            for i, slovo in enumerate(akcia):
-                if slovo[0] == '?':
-                    akcia[i] = premenne[slovo]
-            nove_akcie.append(akcia)
-        return nove_akcie
+        if nove_pravidla:
+            self.vykonaj(nove_pravidla)
+        print(self.fakty)
+
+    def vykonaj(self,pravidla):
+        for akcia in pravidla:
+            for i, pravidlo in enumerate(akcia):
+                if pravidlo[0] == 'pridaj':
+                    self.fakty.append(pravidlo[1:])
+                elif pravidlo[0] == 'vymaz':
+                    self.fakty.remove(pravidlo)
+                elif pravidlo[0] == 'sprava':
+                    print(pravidlo[1:])
 
     def vyhodnot_podmienky(self, podmienky, premenne):
         if not podmienky:
@@ -71,6 +77,35 @@ class machine:
                     #     break
         podmienky.remove(podmienka)
         return self.vyhodnot_podmienky(podmienky,premenne)
+
+    def naviaz(self, premenne, akcie):
+        nove_akcie = []
+        for akcia in akcie:
+            for i, slovo in enumerate(akcia):
+                if slovo[0] == '?':
+                    akcia[i] = premenne[slovo]
+            nove_akcie.append(akcia)
+        return nove_akcie
+
+    def filtruj(self, pravidla):
+        iba_vypis = 0
+        for akcia in pravidla:
+            for i, pravidlo in enumerate(akcia):
+                iba_vypis = 0
+                # print(pravidlo)
+                # print(pravidlo[1:])
+                # print(self.fakty)
+                if pravidlo[0] == 'pridaj' and pravidlo[1:] in self.fakty:
+                    akcia.remove(pravidlo)
+                elif pravidlo[0] == 'vymaz' and pravidlo[1:] not in self.fakty:
+                    akcia.remove(pravidlo)
+                elif pravidlo[0] == 'sprava':
+                    iba_vypis = 1
+                else:
+                    iba_vypis = 0
+            if not akcia or iba_vypis == 1:
+                pravidla.remove(akcia)
+        return pravidla
 
         # for podmienka in podmienky:
         #     print(1)
