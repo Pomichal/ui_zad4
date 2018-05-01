@@ -1,0 +1,32 @@
+{
+  "rules": {
+    "rodic1": [
+      [
+        "?X rodic ?Y",
+        "manzelia ?X ?Z"
+      ],
+      [
+        "pridaj ?Z rodic ?Y"
+      ]
+    ],
+    "rodic2": [
+      [
+        "?X rodic ?Y",
+        "manzelia ?Z ?X"
+      ],
+      [
+        "pridaj ?Z rodic ?Y"
+      ]
+    ]
+  },
+  "facts:": {
+    "rodic": [
+      "Peter",
+      "Jano"
+    ],
+    "manzelia": [
+      "Peter",
+      "Eva"
+    ]
+  }
+}
