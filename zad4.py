@@ -17,11 +17,12 @@ class machine:
         self.fakty = fakty
 
     def najdi_fakty(self):
-        nove = -1
-        while len(self.fakty) != nove:
-            nove = len(self.fakty)
+        nove = 1
+        while nove == 1:
+            nove = 0
             for meno, opis in self.pravidla.items():
-                self.vyhodnot_podmienky(opis[0],opis[1],{})
+                if self.vyhodnot_podmienky(opis[0],opis[1],{}) == 1:
+                    nove = 1
         print()
         print("Vsetky fakty:")
         list((print(' '.join(x)) for x in self.fakty))
@@ -35,8 +36,10 @@ class machine:
             nove_pravidla = self.filtruj(nove_pravidla)
             if nove_pravidla:
                 self.vykonaj(nove_pravidla)
-            return
+                return 1
+            return 0
 
+        vrat = 0
         podmienka = podmien[0]  # pokusa sa splnit prvu podmienku, dosada kazdy fakt
         for fakt in self.fakty:
             podmienky = podmien.copy()
@@ -56,8 +59,9 @@ class machine:
                     elif podm[x][0] == '?':
                         premenne[podm[x]] = fakt[x]
                 if tmp == 0:            #ak nasiel vhodne naviazanie podmienky, vnara sa do dalsej
-                    self.vyhodnot_podmienky(podmienky[1:], akcie, premenne)
-
+                    if self.vyhodnot_podmienky(podmienky[1:], akcie, premenne) == 1:
+                        vrat = 1
+        return vrat
     #naviaze najdene premenne na premenne v akcii
     def naviaz(self, premenne, akcie):
         nove_akcie = []
@@ -114,34 +118,13 @@ class machine:
                     print(' '.join(pravidlo[1:]))
 
     def vyhodnot(self,pravidlo):
-        # zaciatky = [index for index, value in enumerate(pravidlo) if value == '{']
-        # konce = [index for index, value in enumerate(pravidlo) if value == '}']
         nove_pravidlo = pravidlo
         while '{' in nove_pravidlo:
             zaciatok = nove_pravidlo.index('{')
             koniec = nove_pravidlo.index('}')
-            # print(nove_pravidlo[:zaciatok])
-            # print(nove_pravidlo[zaciatok + 1:koniec])
-            # print(" ".join(nove_pravidlo[zaciatok + 1:koniec]))
-            # print(nove_pravidlo[koniec + 1:])
             vysledok = eval(" ".join(nove_pravidlo[zaciatok + 1:koniec]))
-            # print(vysledok)
-            # vysledok = eval(" ".join(pravidlo[zaciatok + 1:koniec]))
             nove_pravidlo = nove_pravidlo[:zaciatok] + [str(vysledok)] + nove_pravidlo[koniec + 1:]
         return nove_pravidlo
-        # nove_pravidlo = []
-        # while '{' in pravidlo:
-        #     zaciatok= pravidlo.index('{')
-        #     koniec = pravidlo.index('}')
-        #     print(pravidlo[:zaciatok -1])
-        #     print(pravidlo[zaciatok + 1:koniec])
-        #     print(" ".join(pravidlo[zaciatok + 1:koniec]))
-        #     print(pravidlo[koniec + 1:])
-        #     vysledok = eval(" ".join(pravidlo[zaciatok + 1:koniec]))
-        #     print(vysledok)
-        #     nove_pravidlo = pravidlo[:zaciatok -1] + [str(vysledok)] + pravidlo[koniec + 1:]
-        # return pravidlo
-
 
 # fakty = []
 # while True :
@@ -156,7 +139,8 @@ class machine:
 # fakty = [['typ','karoserie','sedan'],['pocet','dveri','4'],['pohanana','naprava','predna'],['predna','maska','mriezka'],
 #          ['ma', 'okruhle', 'svetla'],['karoseria','sedan'],['sedan','4'],['naprava', 'predna']]
 # m = machine('fiaty.json',fakty,debug=0)
-fakty = [['faktorial','2']]
+# m = machine('rodinne_vztahy.json',fakty,debug=0)
+fakty = [['faktorial','5']]
 m = machine('faktorial.json',fakty,debug=0)
 m.najdi_fakty()
 
