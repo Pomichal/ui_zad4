@@ -57,7 +57,7 @@ class machine:
                     elif podm[x][0] != '?' and podm[x] != fakt[x]:
                         tmp = 1
                         break
-                    elif podm[x][0] == '?' and fakt[x][0].isupper():
+                    elif podm[x][0] == '?':
                         premenne[podm[x]] = fakt[x]
                 if tmp == 0:  #ak nasiel vhodne naviazanie podmienky, vnara sa do dalsej
                     self.vyhodnot_podmienky(podmienky[1:], akcie, premenne)
@@ -124,6 +124,9 @@ class machine:
 fakty = [['Peter','rodic','Jano'],['Peter','rodic','Vlado'],['manzelia','Peter','Eva'],['Vlado','rodic','Maria'],
                  ['Vlado','rodic','Viera'],['muz','Peter'],['muz','Jano'],['muz','Vlado'],['zena','Maria'],
                  ['zena','Viera'],['zena','Eva']]
+# fakty = [['typ','karoserie','sedan'],['pocet','dveri','4'],['pohanana','naprava','predna'],['predna','maska','mriezka'],
+#          ['ma', 'okruhle', 'svetla'],['karoseria','sedan'],['sedan','4'],['naprava', 'predna']]
+# m = machine('fiaty.json',fakty,debug=0)
 m = machine('rodinne_vztahy.json',fakty,debug=0)
 m.najdi_fakty()
 
