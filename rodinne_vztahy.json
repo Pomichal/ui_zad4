@@ -43,6 +43,34 @@
         "<> ?Y ?Z"
       ],
       ["pridaj ?Y a ?Z su surodenci"]
+    ],
+    "Brat":[
+      [
+      "?Y a ?Z su surodenci",
+      "muz ?Y"
+      ],
+      [
+        "pridaj ?Y je brat ?Z"
+      ]
+    ],
+    "Stryko":[
+      [
+        "?Y je brat ?Z",
+        "?Z rodic ?X"
+      ],
+      [
+        "pridaj ?Y je stryko ?X",
+        "sprava sprava: ?X ma stryka"
+      ]
+    ],
+    "Test mazania":[
+      [
+        "?Y je stryko ?X",
+        "zena ?X"
+      ],
+      [
+        "vymaz zena ?X"
+      ]
     ]
   }
 }
