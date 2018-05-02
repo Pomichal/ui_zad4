@@ -1,0 +1,43 @@
+{
+  "pravidla":{
+    "F1":[
+      [
+       "faktorial 0"
+      ],
+      [
+        "vymaz faktorial 0",
+        "pridaj faktorial 0 je 1",
+        "sprava Faktorial 0 je 1"
+      ]
+    ],
+    "F2":[
+      [
+        "faktorial ?x",
+        "<> ?x 0"
+      ],
+      [
+        "vymaz faktorial ?x",
+        "pridaj medzivypocet ?x { ?x - 1 } ?x"
+      ]
+    ],
+    "F3":[
+      [
+        "medzivypocet ?x 0 ?y"
+      ],
+      [
+        "vymaz medzivypocet ?x 0 ?y",
+        "pridaj faktorial ?x je ?y",
+        "sprava Faktorial ?x je ?y"
+      ]
+    ],
+    "F4":[
+      [
+        "medzivypocet ?x ?y ?z"
+      ],
+      [
+        "vymaz medzivypocet ?x ?y ?z",
+        "pridaj medzivypocet ?x { ?y - 1 } { ?y * ?z }"
+      ]
+    ]
+  }
+}
